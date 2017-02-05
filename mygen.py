@@ -298,7 +298,7 @@ def training_set_plates_only(count):
     testY_ = []
 
     for i in range(count):
-        if i % 10000 == 0:
+        if i % 50000 == 0:
             print i, " training sets ready"
         plate, plate_mask, code = generate_plate(FONT_HEIGHT, char_ims['UKNumberPlate.ttf'])
         plate = cv2.resize(plate, (40, 200))
@@ -307,7 +307,7 @@ def training_set_plates_only(count):
         Y_.append(label)
 
     for i in range(int(count*0.3)):
-        if i % 10000 == 0:
+        if i % 50000 == 0:
             print i, " validation sets ready"
         plate, plate_mask, code = generate_plate(FONT_HEIGHT, char_ims['UKNumberPlate.ttf'])
         plate = cv2.resize(plate, (40, 200))
