@@ -31,7 +31,6 @@ __all__ = (
     'WINDOW_SHAPE',
 )
 
-
 import tensorflow as tf
 
 import common

@@ -26,7 +26,6 @@
 Generate training and test images.
 
 """
-import time
 
 __all__ = (
     'generate_ims',
@@ -36,11 +35,9 @@ import itertools
 import math
 import os
 import random
-import sys
 
 import cv2
 import numpy
-
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont

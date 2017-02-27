@@ -31,21 +31,19 @@ __all__ = (
     'train',
 )
 
-
 import functools
 import glob
 import itertools
 import multiprocessing
-import random
 import sys
 import time
 
 import cv2
+import gen
 import numpy
 import tensorflow as tf
 
 import common
-import gen
 import model
 
 

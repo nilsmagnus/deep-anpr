@@ -35,7 +35,6 @@ __all__ = (
     'post_process',
 )
 
-
 import collections
 import math
 import sys

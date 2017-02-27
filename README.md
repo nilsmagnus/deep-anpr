@@ -5,10 +5,9 @@
  Work in progress, but something is working. 
  
  # The idea
- 1. Instead of using a moving window, use houghman-transform to identify the rectangle of the license-plate
- 2. Use a deep-network to identify what is written on the license-plate
- 
- Substituting the windowing approach hopefully saves some time. 
+ 1. Syntethize training data with the type of number plate you want
+ 2. Use multilayer convolutional networks for training
+ 3. Train the network with endless counts of numberplates
 
 #dependencies
  
