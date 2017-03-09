@@ -1,5 +1,5 @@
-import cv2
-
+from PIL import Image
+from PIL import ImageFont, ImageDraw
 import numpy as np
 
 PLATE_SIZE = (50,200)
@@ -7,18 +7,20 @@ IMAGE_SIZE = (240, 240)
 
 
 def generate_blank_plate(height, width):
-    blank_image = np.full((height,width,1), 255, np.uint8)
+    blank_image = Image.new("RGB", (height, width), (255,255,255))
     return blank_image
 
 
-def draw_text_onplate(plate, text, x=0, y=0):
-    cv2.putText(plate, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 2, 127)
+def draw_text_onplate(plate, text, font, x=0, y=0):
+    draw = ImageDraw.Draw(plate)
+    draw.text((10, 10), text, (0,0,0), font=font)
+    draw = ImageDraw.Draw(plate)
     return plate
 
 
 def create_image(height=240, width=240):
-    blank_image = np.full((height,width,1), 177, np.uint8)
-    return blank_image
+    image = Image.new("RGB", (height, width), (0,0,0))
+    return image
 
 
 def add_plate_to_image(plate, image, xycoor):
@@ -29,12 +31,18 @@ def add_plate_to_image(plate, image, xycoor):
     return image
 
 
-plate = generate_blank_plate(PLATE_SIZE[0],PLATE_SIZE[1])
-plate = draw_text_onplate(plate, "hello", 25,50)
+def loadFont(fontPath ="./UKNumberPlate.ttf"):
+    font = ImageFont.truetype(fontPath, 35)
+    return font
 
-image = create_image(IMAGE_SIZE[0], IMAGE_SIZE[1])
-image = add_plate_to_image(plate, image, (1,1))
 
-cv2.imshow("frame",image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+font = loadFont()
+
+plate = generate_blank_plate(PLATE_SIZE[1],PLATE_SIZE[0])
+plate = draw_text_onplate(plate, "BT 19904",  font, 25,50)
+
+plate.show("plate")
+image = create_image(IMAGE_SIZE[1], IMAGE_SIZE[0])
+#image = add_plate_to_image(plate, image, (1,1))
+
+#image.show("image")
