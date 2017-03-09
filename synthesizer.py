@@ -2,19 +2,15 @@ from PIL import Image
 from PIL import ImageFont, ImageDraw
 import numpy as np
 
-PLATE_SIZE = (50,200)
-IMAGE_SIZE = (240, 240)
+PLATE_SIZE = (20,90)
+IMAGE_SIZE = (512, 512)
 
 
-def generate_blank_plate(height, width):
-    blank_image = Image.new("RGB", (height, width), (255,255,255))
-    return blank_image
-
-
-def draw_text_onplate(plate, text, font, x=0, y=0):
+def generate_plate(height, width, text, font):
+    # Generates a white plate with the given text in black
+    plate = Image.new("RGB", (height, width), (255,255,255))
     draw = ImageDraw.Draw(plate)
-    draw.text((10, 10), text, (0,0,0), font=font)
-    draw = ImageDraw.Draw(plate)
+    draw.text((2, 2), text, (0,0,0), font=font)
     return plate
 
 
@@ -31,18 +27,16 @@ def add_plate_to_image(plate, image, xycoor):
     return image
 
 
-def loadFont(fontPath ="./UKNumberPlate.ttf"):
-    font = ImageFont.truetype(fontPath, 35)
+def loadFont(font_path ="./UKNumberPlate.ttf"):
+    font = ImageFont.truetype(font_path, 22)
     return font
 
 
 font = loadFont()
 
-plate = generate_blank_plate(PLATE_SIZE[1],PLATE_SIZE[0])
-plate = draw_text_onplate(plate, "BT 19904",  font, 25,50)
+plate = generate_plate(PLATE_SIZE[1],PLATE_SIZE[0], "BT 19904",  font)
 
-plate.show("plate")
 image = create_image(IMAGE_SIZE[1], IMAGE_SIZE[0])
-#image = add_plate_to_image(plate, image, (1,1))
+image.paste(plate, (100,100))
 
-#image.show("image")
+image.show("image")
