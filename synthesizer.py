@@ -6,11 +6,13 @@ PLATE_SIZE = (20,90)
 IMAGE_SIZE = (512, 512)
 
 
-def generate_plate(height, width, text, font):
+def generate_plate(height, width, text, font, rotation=0):
     # Generates a white plate with the given text in black
     plate = Image.new("RGB", (height, width), (255,255,255))
     draw = ImageDraw.Draw(plate)
     draw.text((2, 2), text, (0,0,0), font=font)
+    if(rotation):
+        plate = plate.rotate(rotation)
     return plate
 
 

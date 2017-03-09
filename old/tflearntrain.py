@@ -8,9 +8,6 @@ import mygen
 
 SHAPE = [200, 40]
 
-
-
-
 # Building convolutional network
 network = input_data(shape=[None, SHAPE[0], SHAPE[1], 1], name='input')
 network = conv_2d(network, 64, 5, activation='relu')
