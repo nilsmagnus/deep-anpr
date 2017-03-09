@@ -3,6 +3,14 @@
 
 This is work in progress to detect the position of a numberplate in a image.
 
+# Strategy
+
+- generate training-set on the fly to do training
+- until inference is acceptable, do
+  - save the trained model
+  - do inference in an android app
+  - adjust model size/complexity
+
 
 # Notes
 
