@@ -12,6 +12,9 @@ IMAGE_SIZE = (512, 512)
 LETTERS = "ABCDEFGHIJKLMOPQRSTUVWXYZ"
 DIGITS = "0123456789"
 
+# 1 time: load font
+font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
+
 
 def random_plate_string(pattern ="AA DDDDD"):
     # default pattern is the norwegian standard plate
@@ -51,14 +54,9 @@ def generate_plate(height, width, text, font, rotation=0, scale=1):
     return plate
 
 
-# 1 time: load font
-font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
-
-# list all files in bgs
-bgs = os.listdir("bgs")
 
 
-def generate(number=1):
+def generate(bgs, number=1):
     plate_text = random_plate_string()
     ##rotation = random.random()
     plate = generate_plate(PLATE_SIZE[0],PLATE_SIZE[1], plate_text,  font)
@@ -66,7 +64,7 @@ def generate(number=1):
     plate_position = random_coords(IMAGE_SIZE, plate.size)
 
     # open image, convert to grayscale and resize it to wanted size
-    background = Image.open("bgs/" + random.choice(bgs))
+    background = Image.open(random.choice(bgs))
     background = background.convert('L')
     background = background.resize(IMAGE_SIZE, Image.BILINEAR)
 
@@ -76,6 +74,11 @@ def generate(number=1):
 
     return background, plate_position, plate_text
 
+def text_to_one_hot(text):
+    one_hot = numpy.zeros(26)
+    one_hot[LETTERS.index(text[0])] = 1
+    return one_hot
+
 def position_to_one_hot(position, image_size):
     one_hot = numpy.zeros(image_size[0]+image_size [1])
     one_hot[position[0]] = 1
@@ -83,21 +86,56 @@ def position_to_one_hot(position, image_size):
     return one_hot
 
 
-def generate_training_touple(image, position):
+def generate_training_touple(image, position, text):
+    #
     image_data = numpy.array(image)
-    one_hot = position_to_one_hot(position, IMAGE_SIZE)
+
+    # default generate one_hot from text
+    one_hot = text_to_one_hot(text)
+
+    if position:
+        # if position is set, then generate hot from position
+        one_hot = position_to_one_hot(position, IMAGE_SIZE)
+
     return image_data, one_hot
 
 
-if __name__ == "__main__":
+def init_bg_file_list(path):
+    result =[]
+    for path, subdirs, files in os.walk(path):
+        for name in files:
+            result.append(os.path.join(path, name))
+    return result
+
+def training_set_first_letter(num=100000):
+
+    bgs = init_bg_file_list("bgs")
     # testing purposes only
-    im, pos, _ = generate()
 
-    print "position is ", pos
+    X_ = []
+    Y_ = []
 
-    x, y = generate_training_touple(im, pos)
+    for i in range(1, num):
+        im, pos, text = generate(bgs)
+
+        x, y = generate_training_touple(im, None, text)
+        X_.append(x)
+        Y_.append(y)
+
+    return X_, Y_
+
+
+if __name__ == "__main__":
+
+    bgs = init_bg_file_list("bgs")
+    # testing purposes only
+    im, pos, text = generate(bgs)
+
+    print "position is ", pos, " text is '", text, "'"
+
+    x, y = generate_training_touple(im, pos, text)
 
     assert x.shape == IMAGE_SIZE
-    assert len(y) == IMAGE_SIZE[0]+IMAGE_SIZE[1]
+    assert len(y) == 26
 
     im.show("test")

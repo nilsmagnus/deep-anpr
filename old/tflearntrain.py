@@ -29,7 +29,7 @@ network = local_response_normalization(network)
 #network = dropout(network, 0.8)
 network = fully_connected(network, 8184, activation='tanh')
 network = dropout(network, 0.8)
-network = fully_connected(network, 253, activation='softmax')
+network = fully_connected(network, 26, activation='softmax')
 
 adam = tflearn.Adam(learning_rate=0.001, epsilon=0.1 )
 network = regression(network, optimizer=adam, learning_rate=0.01,
