@@ -43,14 +43,14 @@ model = tflearn.DNN(network, tensorboard_verbose=0)
 
 
 for i in range(5):
-    X, Y, testX, testY  = synthesizer.training_set_first_letter(100000)
+    X, Y, testX, testY  = synthesizer.training_set_first_letter(1000)
     X = X.reshape([-1, SHAPE[0], SHAPE[1], 1])
     testX = testX.reshape([-1, SHAPE[0], SHAPE[1], 1])
 
 
     model.fit({'input': X}, {'target': Y}, n_epoch=10,
             validation_set=({'input': testX}, {'target': testY}),
-               snapshot_step=10000, show_metric=True, run_id='convnet_anpr')
+               snapshot_step=100, show_metric=True, run_id='convnet_anpr')
 
-    name = "convnet_myanpr.tflearn."+ str(i)
+    name = "convnet_firstletter.tflearn."+ str(i)
     #model.save(name)

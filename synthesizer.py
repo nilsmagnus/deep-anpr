@@ -7,9 +7,9 @@ import os
 FONT_PATH = "./UKNumberPlate.ttf"
 FONT_SIZE = 22
 PLATE_SIZE = (20,94)
-IMAGE_SIZE = (512, 512)
+IMAGE_SIZE = (256, 256)
 
-LETTERS = "ABCDEFGHIJKLMOPQRSTUVWXYZ"
+LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 DIGITS = "0123456789"
 
 # 1 time: load font
@@ -80,7 +80,7 @@ def text_to_one_hot(text):
     return one_hot
 
 def position_to_one_hot(position, image_size):
-    one_hot = numpy.zeros(image_size[0]+image_size [1])
+    one_hot = numpy.zeros(image_size[0]+image_size [1], dtype=numpy.int)
     one_hot[position[0]] = 1
     one_hot[image_size[0]+position[1]] = 1
     return one_hot
@@ -107,26 +107,44 @@ def init_bg_file_list(path):
             result.append(os.path.join(path, name))
     return result
 
-def training_set_first_letter(num=100000):
+def training_set_first_letter(num=10):
 
     bgs = init_bg_file_list("bgs")
+    if bgs == None or len(bgs) == 0:
+        print "Could not find any files in /bgs"
     # testing purposes only
 
-    X_ = []
-    Y_ = []
+    X_ = numpy.ndarray(shape=(num,IMAGE_SIZE[0], IMAGE_SIZE[1]), dtype=numpy.int8)
+    Y_ = numpy.ndarray(shape=(num,len(LETTERS)), dtype=numpy.int8)
 
-    for i in range(1, num):
+    test_size = (num+1)/3
+    X_test = numpy.ndarray(shape=(test_size,IMAGE_SIZE[0], IMAGE_SIZE[1]), dtype=numpy.int8)
+    Y_test = numpy.ndarray(shape=(test_size,len(LETTERS)), dtype=numpy.int8)
+
+    for i in range(0, num):
         im, pos, text = generate(bgs)
-
         x, y = generate_training_touple(im, None, text)
-        X_.append(x)
-        Y_.append(y)
+        X_[i] = x
+        Y_[i] = y
 
-    return X_, Y_
+    print "training set done"
+
+    for i in range(0, test_size):
+        im, pos, text = generate(bgs)
+        x, y = generate_training_touple(im, None, text)
+        X_test[i] = x
+        Y_test[i] = y
+
+    print "training set and test set for first letter is complete"
+
+    return X_, Y_, X_test, Y_test
 
 
 if __name__ == "__main__":
+    x, y = training_set_first_letter(2)
+    assert len(x) == 2
 
+def test():
     bgs = init_bg_file_list("bgs")
     # testing purposes only
     im, pos, text = generate(bgs)
