@@ -23,14 +23,14 @@ network = dropout(network, 0.8)
 network = fully_connected(network, 26, activation='softmax')
 
 adam = tflearn.Adam(learning_rate=0.001, epsilon=0.1 )
-network = regression(network, name='target')
+network = regression(network, name='first_letter_nummerskilt')
 
 # Training
 model = tflearn.DNN(network, tensorboard_verbose=0)
 
 
 for i in range(5):
-    X, Y, testX, testY  = synthesizer.training_set_first_letter(1000)
+    X, Y, testX, testY  = synthesizer.training_set_first_letter(5000)
     X = X.reshape([-1, SHAPE[0], SHAPE[1], 1])
     testX = testX.reshape([-1, SHAPE[0], SHAPE[1], 1])
 

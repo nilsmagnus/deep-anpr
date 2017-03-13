@@ -127,7 +127,7 @@ def training_set_first_letter(num=10):
         X_[i] = x
         Y_[i] = y
 
-    print "training set done"
+    print "training set ready"
 
     for i in range(0, test_size):
         im, pos, text = generate(bgs)
@@ -135,7 +135,7 @@ def training_set_first_letter(num=10):
         X_test[i] = x
         Y_test[i] = y
 
-    print "training set and test set for first letter is complete"
+    print "training set and test set for first letter is ready"
 
     return X_, Y_, X_test, Y_test
 
